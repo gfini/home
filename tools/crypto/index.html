@@ -31,9 +31,8 @@
             return btoa(s);
         }
 
-        // Derive AES key from passphrase using PBKDF2
-        async function deriveKey(passphrase) {
-            const salt = toBytes("fixed-demo-salt"); // WARNING: fixed salt is insecure for real use
+        // Derive AES key using PBKDF2 with provided salt
+        async function deriveKey(passphrase, salt) {
             const keyMaterial = await crypto.subtle.importKey(
                 "raw",
                 toBytes(passphrase),
@@ -54,20 +53,24 @@
             const keyStr = document.getElementById("encKey").value;
             const plaintext = document.getElementById("encText").value;
 
-            const key = await deriveKey(keyStr);
+            const salt = crypto.getRandomValues(new Uint8Array(16));
+            const key = await deriveKey(keyStr, salt);
+
             const iv = crypto.getRandomValues(new Uint8Array(12));
             const ptBytes = toBytes(plaintext);
 
-            const cipherBuffer = await crypto.subtle.encrypt(
+            const cipherBuf = await crypto.subtle.encrypt(
                 { name: "AES-GCM", iv },
                 key,
                 ptBytes
             );
 
-            const cipherBytes = new Uint8Array(cipherBuffer);
-            const combined = new Uint8Array(iv.length + cipherBytes.length);
-            combined.set(iv, 0);
-            combined.set(cipherBytes, iv.length);
+            const cipherBytes = new Uint8Array(cipherBuf);
+
+            const combined = new Uint8Array(salt.length + iv.length + cipherBytes.length);
+            combined.set(salt, 0);
+            combined.set(iv, salt.length);
+            combined.set(cipherBytes, salt.length + iv.length);
 
             document.getElementById("encOut").value = bytesToBase64(combined);
         }
@@ -76,26 +79,28 @@
             const keyStr = document.getElementById("decKey").value;
             const b64 = document.getElementById("decText").value;
 
-            const key = await deriveKey(keyStr);
             const combined = base64ToBytes(b64);
 
-            if (combined.length < 12) {
+            if (combined.length < 16 + 12) {
                 document.getElementById("decOut").value = "Invalid ciphertext";
                 return;
             }
 
-            const iv = combined.slice(0, 12);
-            const ciphertext = combined.slice(12);
+            const salt = combined.slice(0, 16);
+            const iv = combined.slice(16, 28);
+            const ciphertext = combined.slice(28);
+
+            const key = await deriveKey(keyStr, salt);
 
             try {
-                const plainBuffer = await crypto.subtle.decrypt(
+                const plainBuf = await crypto.subtle.decrypt(
                     { name: "AES-GCM", iv },
                     key,
                     ciphertext
                 );
-                document.getElementById("decOut").value = fromBytes(new Uint8Array(plainBuffer));
+                document.getElementById("decOut").value = fromBytes(new Uint8Array(plainBuf));
             } catch (e) {
-                document.getElementById("decOut").value = "Decryption failed (wrong key or data corrupted)";
+                document.getElementById("decOut").value = "Decryption failed (wrong key or corrupted data)";
             }
         }
     </script>
