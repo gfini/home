@@ -1,1 +1,2 @@
-# home
+# GFINI
+Tu zacznie się wszystko...
