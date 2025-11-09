@@ -13,10 +13,7 @@ document.getElementById("submit-btn").addEventListener("click", () => {
 // ----- envelope -----
 
 function prepareEnvelope() {
-    const env = document.getElementById('envelope');
-    env.addEventListener('click', () => {
-        env.classList.toggle('open');
-    });
+    document.getElementById('envelope').addEventListener('click', envelopeOnClick);
 
     // śledzenie kursora — obrót wrappera
     const followingDiv = document.querySelector('.wrapper');
@@ -41,6 +38,28 @@ function prepareEnvelope() {
     });
 }
 
+function envelopeOnClick() {
+    const env = document.getElementById('envelope');
+    const letter = document.getElementById('text');
+
+    env.classList.add('open');
+    letter.classList.add('zoom-in');
+    letter.addEventListener('click', () => {
+        letter.classList.remove('zoom-in');
+        letter.classList.add('zoom-out');
+        setTimeout(resetEnvelope, 2000)
+    });
+    env.removeEventListener('click', envelopeOnClick);
+}
+
+function resetEnvelope() {
+    const env = document.getElementById('envelope');
+    const letter = document.getElementById('text');
+
+    letter.classList.remove('zoom-out');
+    env.classList.remove('open');
+    env.addEventListener('click', envelopeOnClick);
+}
 
 // ----- decryption ------
 
