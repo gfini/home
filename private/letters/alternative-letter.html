@@ -10,14 +10,28 @@
 
 <body>
 
-    <div id="login-box" class="box">
-        <p>List jest zaszyfrowany. Wprowadź swoje imię:</p>
+    <div id="login-box">
+        <p>List jest zaszyfrowany.</p>
+        <label for="key-input">Wprowadź swoje imię:</label>
         <input id="key-input">
         <button id="submit-btn">Wejdź</button>
     </div>
 
-    <div id="content-box" class="box hidden">
-        <p>This is the revealed content.</p>
+    <div id="content-box" class="hidden">
+        <div class="container">
+            <div id="envelope" class="wrapper">
+                <div class="lid one"></div>
+                <div class="lid two"></div>
+                <div class="envelope"></div>
+                <div class="letter" id="text">
+                    <p>Ostatnio wykoszono teren wokół tych budynków do gołej ziemii, tak że widać je bezpośrednio z
+                        chodnika. Coś czuję, że mogą zostać niedługo wyburzone. Ten "żółty" dom, najnowszy, największy i
+                        najbardziej schowany, wygląda jak świeżutko opuszczony przez meneli, tak że nawet zapach jeszcze
+                        pozostał. Prawdopodobnie wygonieni przez te wycinki, ale na górę nie wchodziłem. Polecam raczej
+                        te starsze budynki.</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>

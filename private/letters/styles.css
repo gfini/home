@@ -1,22 +1,139 @@
-body {
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
     height: 100vh;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #f3f3f3;
     font-family: sans-serif;
+    background-color: #3B4049;
 }
 
-.box {
+/* Dodany kontener z perspektywą */
+.container {
+    perspective: 1000px;
+}
+
+.wrapper {
+    height: 200px;
+    width: 300px;
+    background-color: #3760C9;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    z-index: 0;
+    cursor: pointer;
+    transition: transform 0.1s ease-out;
+    /* płynne obracanie za kursorem */
+}
+
+.lid {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    border-right: 150px solid transparent;
+    border-bottom: 100px solid transparent;
+    border-left: 150px solid transparent;
+    transform-origin: top;
+    transition: transform 0.25s linear;
+}
+
+.lid.one {
+    border-top: 130px solid #658ced;
+    transform: rotateX(0deg);
+    z-index: 5;
+    transition-delay: 0.75s;
+}
+
+.lid.two {
+    border-top: 130px solid #3760C9;
+    transform: rotateX(90deg);
+    z-index: 1;
+    transition-delay: 0.5s;
+}
+
+.envelope {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    border-top: 100px solid transparent;
+    border-right: 150px solid #C4DFF0;
+    border-bottom: 100px solid #C4DFF0;
+    border-left: 150px solid #a4d4f2;
+    z-index: 3;
+}
+
+.letter {
+    position: absolute;
+    top: 10px;
+    width: 90%;
+    height: 90%;
+    background-color: white;
+    z-index: 2;
+    transform-origin: center;
+    transition: transform 1s ease;
+}
+
+.letter p {
+    text-align: center;
+    font-size: 8px;
+    margin-top: 12px;
+    color: #3B4049;
+}
+
+/* STAN OTWARTY */
+.wrapper.open .lid.one {
+    transform: rotateX(90deg);
+    transition-delay: 0s;
+}
+
+.wrapper.open .lid.two {
+    transform: rotateX(180deg);
+    transition-delay: 0.25s;
+}
+
+/* ETAP 1: wysuwanie */
+.wrapper.open .letter {
+    transform: translateY(-250px);
+    transition-delay: 0.5s;
+}
+
+/* ETAP 2: przybliżenie i przykrycie koperty */
+.wrapper.open .letter {
+    animation-name: lift-and-zoom;
+    animation-duration: 2s;
+    animation-delay: 1.7s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes lift-and-zoom {
+    from {
+        transform: translateY(-250px) scale(1);
+        z-index: 2;
+    }
+
+    to {
+        transform: translateY(0px) scale(1.8);
+        z-index: 10;
+    }
+}
+
+/* ----- guard screen ----- */
+
+#login-box {
     background: white;
     padding: 20px 30px;
     border-radius: 8px;
     text-align: center;
-}
-
-#content-box {
-    background: #cce3ff;
 }
 
 .hidden {
