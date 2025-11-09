@@ -19,10 +19,10 @@ function prepareEnvelope() {
     });
 
     // śledzenie kursora — obrót wrappera
-    const rotating = document.querySelector('.wrapper');
+    const followingDiv = document.querySelector('.wrapper');
 
     document.addEventListener('mousemove', (event) => {
-        const rect = rotating.getBoundingClientRect();
+        const rect = followingDiv.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
 
@@ -32,7 +32,12 @@ function prepareEnvelope() {
         const rotateX = -deltaY / 40;
         const rotateY = deltaX / 40;
 
-        rotating.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        followingDiv.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+        const shadowX = -(deltaX / 20);
+        const shadowY = -(deltaY / 20);
+
+        followingDiv.style.boxShadow = `${shadowX}px ${shadowY}px 25px rgba(0,0,0,0.25)`;
     });
 }
 
