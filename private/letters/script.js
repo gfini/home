@@ -17,8 +17,23 @@ function prepareEnvelope() {
 
     // śledzenie kursora — obrót wrappera
     const followingDiv = document.querySelector('.wrapper');
+    const letter = document.querySelector('.letter');
 
     document.addEventListener('mousemove', (event) => {
+        // letter only
+        const rectLetter = letter.getBoundingClientRect();
+        const centerXLetter = rectLetter.left + rectLetter.width / 2;
+        const centerYLetter = rectLetter.top + rectLetter.height / 2;
+
+        const deltaXLetter = event.clientX - centerXLetter;
+        const deltaYLetter = event.clientY - centerYLetter;
+
+        const shadowXLetter = -(deltaXLetter / 30);
+        const shadowYLetter = -(deltaYLetter / 30);
+
+        letter.style.boxShadow = `${shadowXLetter}px ${shadowYLetter}px 25px rgba(0,0,0,0.25)`;
+
+        // wrapper
         const rect = followingDiv.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
