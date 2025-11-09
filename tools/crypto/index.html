@@ -4,13 +4,13 @@
 <body>
     <h3>Encrypt</h3>
     Key: <input id="encKey" type="text"><br>
-    Plaintext: <input id="encText" type="text"><br>
+    Plaintext: <textarea id="encText" rows="3" cols="60"></textarea><br>
     <button onclick="encrypt()">Encrypt</button><br>
     Encrypted (Base64): <textarea id="encOut" rows="3" cols="60"></textarea>
 
     <h3>Decrypt</h3>
     Key: <input id="decKey" type="text"><br>
-    Ciphertext (Base64): <input id="decText" type="text"><br>
+    Ciphertext (Base64): <textarea id="decText" rows="3" cols="60"></textarea><br>
     <button onclick="decrypt()">Decrypt</button><br>
     Decrypted text: <textarea id="decOut" rows="3" cols="60"></textarea>
 
