@@ -49,9 +49,8 @@ function showTheEnvelope(recipient, content) {
         loginBox.classList.add("hidden");
         contentBox.classList.remove("hidden");
         contentBox.classList.add("swipe-in");
+        prepareEnvelope()
     }, 1000);
-
-    prepareEnvelope()
 }
 
 
