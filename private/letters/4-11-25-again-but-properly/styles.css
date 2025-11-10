@@ -1,0 +1,289 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+    background-color: #3B4049;
+    overflow-x: hidden;
+}
+
+/* Dodany kontener z perspektywą */
+.container {
+    perspective: 1000px;
+}
+
+.wrapper {
+    height: 200px;
+    width: 300px;
+    background-color: #3760C9;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    z-index: 0;
+    cursor: pointer;
+    transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+    /* płynne obracanie za kursorem */
+}
+
+.lid {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    border-right: 150px solid transparent;
+    border-bottom: 100px solid transparent;
+    border-left: 150px solid transparent;
+    transform-origin: top;
+    transition: transform 0.25s linear;
+}
+
+.lid.one {
+    border-top: 130px solid #658ced;
+    transform: rotateX(0deg);
+    z-index: 5;
+    transition-delay: 0.25s;
+}
+
+.lid.two {
+    border-top: 130px solid #3760C9;
+    transform: rotateX(90deg);
+    z-index: 1;
+    transition-delay: 0s;
+}
+
+.envelope {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    border-top: 100px solid transparent;
+    border-right: 150px solid #C4DFF0;
+    border-bottom: 100px solid #C4DFF0;
+    border-left: 150px solid #a4d4f2;
+    z-index: 3;
+}
+
+.recipient {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 7;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding-right: 30px;
+    padding-bottom: 24px;
+}
+
+.recipient p {
+    font-family: "Brush Script MT", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 24px;
+}
+
+.letter {
+    position: absolute;
+    width: 180%;
+    height: 180%;
+    background-color: white;
+    cursor: pointer;
+    z-index: 2;
+    transform-origin: center;
+    transition-timing-function: ease;
+    overflow-y: scroll;
+    padding: 20px;
+    transform: translateY(-80px) scale(0.5);
+}
+
+.letter p {
+    text-align: left;
+    font-size: 14px;
+    margin: 10px;
+    color: #3B4049;
+}
+
+.wrapper.open {
+    cursor: default;
+}
+
+/* STAN OTWARTY */
+.wrapper.open .lid.one {
+    transform: rotateX(90deg);
+    transition-delay: 0s;
+}
+
+.wrapper.open .lid.two {
+    transform: rotateX(180deg);
+    transition-delay: 0.25s;
+}
+
+/* wyjęcie i przybliżenie listu */
+.zoom-in {
+    animation-name: lift-and-zoom;
+    animation-duration: 2s;
+    animation-delay: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+/* oddalenie i schowanie listu */
+.zoom-out {
+    animation-name: zoom-out-and-put;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes lift-and-zoom {
+    0% {
+        transform: translateY(-80px) scale(0.5);
+        height: 180%;
+        z-index: 2;
+    }
+
+    50% {
+        transform: translateY(-330px) scale(0.5);
+        height: 180%;
+        z-index: 2;
+    }
+
+    100% {
+        transform: translateY(-200px) scale(1);
+        height: 300%;
+        z-index: 10;
+    }
+}
+
+@keyframes zoom-out-and-put {
+    0% {
+        transform: translateY(-200px) scale(1);
+        height: 300%;
+        z-index: 10;
+    }
+
+    50% {
+        transform: translateY(-330px) scale(0.5);
+        height: 180%;
+        z-index: 2;
+    }
+
+    100% {
+        transform: translateY(-80px) scale(0.5);
+        height: 180%;
+        z-index: 2;
+    }
+}
+
+/* ----- guard screen ----- */
+
+.login-wrapper {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+.login-wrapper h3 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#wrong {
+    padding: 10px;
+    color: #840404;
+    font-size: small;
+    text-align: center;
+}
+
+.login-wrapper div {
+    align-self: flex-end;
+    font-style: italic;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.hidden {
+    display: none;
+}
+
+label {
+    flex-grow: 1;
+    text-align: end;
+    padding-right: 10px;
+}
+
+input {
+    padding: 6px 8px;
+    border-radius: 5px;
+    flex-grow: 0.5;
+}
+
+button {
+    padding: 6px 12px;
+    margin-top: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition-duration: 0.3s;
+}
+
+button:hover {
+    background-color: #3760C9;
+    color: #fff;
+}
+
+.swipe-out {
+    animation-name: swipe-out-left;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes swipe-out-left {
+    from {
+        transform: translateX(0px) scale(1);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(-1000px) scale(0.5);
+        opacity: 0;
+    }
+}
+
+#content-box {
+    transform: translateX(-1000px) scale(0.5);
+    opacity: 0;
+}
+
+.swipe-in {
+    animation-name: swipe-in-left;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes swipe-in-left {
+    from {
+        transform: translateX(1000px) scale(0.5);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0px) scale(1);
+        opacity: 1;
+    }
+}

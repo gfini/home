@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="favicon.svg">
+    <title>Ostatni list</title>
+</head>
+
+<body>
+
+    <audio id="piano" loop>
+        <source src="Idea 22 - 192 kbps.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="login-box">
+        <div class="login-wrapper">
+            <h3>List jest zaszyfrowany.</h3>
+            <div>
+                <label for="input-1">Twoje imię:</label>
+                <input id="input-1">
+            </div>
+            <div>
+                <label for="input-2">Data ślubu Twojego brata (w formacie 01.01.1970):</label>
+                <input id="input-2">
+            </div>
+            <div>
+                <label for="input-3">Pierwsze słowo z mojego oryginalnego listu:</label>
+                <input id="input-3">
+            </div>
+            <button id="submit-btn">Czytaj list</button>
+            <p id="wrong" class="hidden"></p>
+        </div>
+    </div>
+
+    <div id="content-box" class="hidden">
+        <div class="container">
+            <div id="envelope-wrapper" class="wrapper">
+                <div class="lid one"></div>
+                <div class="lid two"></div>
+                <div class="envelope"></div>
+                <div class="recipient" id="recipient"></div>
+                <div class="letter" id="letter"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>

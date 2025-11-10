@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <h3>Encrypt</h3>
+    Key: <input id="encKey" type="text"><br>
+    Plaintext: <textarea id="encText" rows="3" cols="60"></textarea><br>
+    <button onclick="encrypt()">Encrypt</button><br>
+    Encrypted (Base64): <textarea id="encOut" rows="3" cols="60"></textarea>
+
+    <h3>Decrypt</h3>
+    Key: <input id="decKey" type="text"><br>
+    Ciphertext (Base64): <textarea id="decText" rows="3" cols="60"></textarea><br>
+    <button onclick="decrypt()">Decrypt</button><br>
+    Decrypted text: <textarea id="decOut" rows="3" cols="60"></textarea>
+
+    <script>
+        // --- Helpers ---
+        function toBytes(str) { return new TextEncoder().encode(str); }
+        function fromBytes(bytes) { return new TextDecoder().decode(bytes); }
+
+        function base64ToBytes(b64) {
+            const bin = atob(b64);
+            const arr = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+            return arr;
+        }
+        function bytesToBase64(bytes) {
+            let s = '';
+            for (let i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+            return btoa(s);
+        }
+
+        // Derive AES key using PBKDF2 with provided salt
+        async function deriveKey(passphrase, salt) {
+            const keyMaterial = await crypto.subtle.importKey(
+                "raw",
+                toBytes(passphrase),
+                "PBKDF2",
+                false,
+                ["deriveKey"]
+            );
+            return await crypto.subtle.deriveKey(
+                { name: "PBKDF2", salt, iterations: 100000, hash: "SHA-256" },
+                keyMaterial,
+                { name: "AES-GCM", length: 256 },
+                false,
+                ["encrypt", "decrypt"]
+            );
+        }
+
+        async function encrypt() {
+            const keyStr = document.getElementById("encKey").value;
+            const plaintext = document.getElementById("encText").value;
+
+            const salt = crypto.getRandomValues(new Uint8Array(16));
+            const key = await deriveKey(keyStr, salt);
+
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+            const ptBytes = toBytes(plaintext);
+
+            const cipherBuf = await crypto.subtle.encrypt(
+                { name: "AES-GCM", iv },
+                key,
+                ptBytes
+            );
+
+            const cipherBytes = new Uint8Array(cipherBuf);
+
+            const combined = new Uint8Array(salt.length + iv.length + cipherBytes.length);
+            combined.set(salt, 0);
+            combined.set(iv, salt.length);
+            combined.set(cipherBytes, salt.length + iv.length);
+
+            document.getElementById("encOut").value = bytesToBase64(combined);
+        }
+
+        async function decrypt() {
+            const keyStr = document.getElementById("decKey").value;
+            const b64 = document.getElementById("decText").value;
+
+            const combined = base64ToBytes(b64);
+
+            if (combined.length < 16 + 12) {
+                document.getElementById("decOut").value = "Invalid ciphertext";
+                return;
+            }
+
+            const salt = combined.slice(0, 16);
+            const iv = combined.slice(16, 28);
+            const ciphertext = combined.slice(28);
+
+            const key = await deriveKey(keyStr, salt);
+
+            try {
+                const plainBuf = await crypto.subtle.decrypt(
+                    { name: "AES-GCM", iv },
+                    key,
+                    ciphertext
+                );
+                document.getElementById("decOut").value = fromBytes(new Uint8Array(plainBuf));
+            } catch (e) {
+                document.getElementById("decOut").value = "Decryption failed (wrong key or corrupted data)";
+            }
+        }
+    </script>
+</body>
+
+</html>
