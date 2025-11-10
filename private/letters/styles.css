@@ -72,6 +72,27 @@ body {
     z-index: 3;
 }
 
+.recipient {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 7;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding-right: 30px;
+    padding-bottom: 24px;
+}
+
+.recipient p {
+  font-family: "Brush Script MT", cursive;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 24px;
+}
+
 .letter {
     position: absolute;
     width: 180%;
