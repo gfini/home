@@ -15,7 +15,7 @@ document.getElementById("submit-btn").addEventListener("click", () => {
 let isOpened = false;
 
 function prepareEnvelope() {
-    document.getElementById('envelope').addEventListener('click', envelopeOnClick);
+    document.getElementById('envelope-wrapper').addEventListener('click', envelopeOnClick);
 
     // śledzenie kursora — obrót wrappera
     const followingDiv = document.querySelector('.wrapper');
@@ -59,7 +59,7 @@ function prepareEnvelope() {
 
 function envelopeOnClick() {
     isOpened = true;
-    const env = document.getElementById('envelope');
+    const env = document.getElementById('envelope-wrapper');
     const letter = document.getElementById('text');
 
     env.style.transform = 'rotateX(0deg) rotateY(0deg)';
@@ -77,7 +77,7 @@ function envelopeOnClick() {
 
 function resetEnvelope() {
     isOpened = false;
-    const env = document.getElementById('envelope');
+    const env = document.getElementById('envelope-wrapper');
     const letter = document.getElementById('text');
 
     letter.classList.remove('zoom-out');
