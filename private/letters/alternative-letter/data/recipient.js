@@ -1,1 +1,1 @@
-export const recipient = `BPRWr47zPeC9qTafDYWknmPEFlSNPVYFl38m6CULVQ/g3CsZFSYNhxVUSX6TKmiw`;
+export const recipient = `MfdDkV1BreGPXof1io1RPCOfiFjekQHgh1jEKtEeY7415JgtTaW4m7VIjjJiE2w=`;
