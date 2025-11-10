@@ -185,7 +185,7 @@ body {
     }
 }
 
-/* ----- guard screen ----- */
+/* ----- login screen ----- */
 
 .login-wrapper {
     background: white;
@@ -285,5 +285,26 @@ button:hover {
     to {
         transform: translateY(0px) scale(1);
         opacity: 1;
+    }
+}
+
+/* ----- mobile handling ----- */
+
+.mobile-warning {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.5);
+    display: none;
+    text-align: center;
+}
+
+@media (max-width: 800px) {
+    #login-box {
+        display: none;
+    }
+
+    .mobile-warning {
+        display: flex;
     }
 }
