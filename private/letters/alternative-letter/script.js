@@ -42,8 +42,15 @@ function showTheEnvelope(recipient, content) {
     document.getElementById("recipient").innerHTML = `<p>${recipient}</p>`
     document.getElementById("letter").innerHTML = content
 
-    document.getElementById("login-box").classList.add("hidden");
-    document.getElementById("content-box").classList.remove("hidden");
+    const loginBox = document.getElementById("login-box")
+    const contentBox = document.getElementById("content-box")
+    loginBox.classList.add("swipe-out");
+    setTimeout(() => {
+        loginBox.classList.add("hidden");
+        contentBox.classList.remove("hidden");
+        contentBox.classList.add("swipe-in");
+    }, 1000);
+
     prepareEnvelope()
 }
 
