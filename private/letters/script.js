@@ -12,6 +12,8 @@ document.getElementById("submit-btn").addEventListener("click", () => {
 
 // ----- envelope -----
 
+let isOpened = false;
+
 function prepareEnvelope() {
     document.getElementById('envelope').addEventListener('click', envelopeOnClick);
 
@@ -20,46 +22,52 @@ function prepareEnvelope() {
     const letter = document.querySelector('.letter');
 
     document.addEventListener('mousemove', (event) => {
-        // letter only
-        const rectLetter = letter.getBoundingClientRect();
-        const centerXLetter = rectLetter.left + rectLetter.width / 2;
-        const centerYLetter = rectLetter.top + rectLetter.height / 2;
+        if (isOpened) {
+            // letter only
+            const rectLetter = letter.getBoundingClientRect();
+            const centerXLetter = rectLetter.left + rectLetter.width / 2;
+            const centerYLetter = rectLetter.top + rectLetter.height / 2;
 
-        const deltaXLetter = event.clientX - centerXLetter;
-        const deltaYLetter = event.clientY - centerYLetter;
+            const deltaXLetter = event.clientX - centerXLetter;
+            const deltaYLetter = event.clientY - centerYLetter;
 
-        const shadowXLetter = -(deltaXLetter / 30);
-        const shadowYLetter = -(deltaYLetter / 30);
+            const shadowXLetter = -(deltaXLetter / 30);
+            const shadowYLetter = -(deltaYLetter / 30);
 
-        letter.style.boxShadow = `${shadowXLetter}px ${shadowYLetter}px 25px rgba(0,0,0,0.25)`;
+            letter.style.boxShadow = `${shadowXLetter}px ${shadowYLetter}px 25px rgba(0,0,0,0.25)`;
+        } else {
+            // wrapper
+            const rect = followingDiv.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
 
-        // wrapper
-        const rect = followingDiv.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
+            const deltaX = event.clientX - centerX;
+            const deltaY = event.clientY - centerY;
 
-        const deltaX = event.clientX - centerX;
-        const deltaY = event.clientY - centerY;
+            const rotateX = -deltaY / 40;
+            const rotateY = deltaX / 40;
 
-        const rotateX = -deltaY / 40;
-        const rotateY = deltaX / 40;
+            followingDiv.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
 
-        followingDiv.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            const shadowX = -(deltaX / 20);
+            const shadowY = -(deltaY / 20);
 
-        const shadowX = -(deltaX / 20);
-        const shadowY = -(deltaY / 20);
-
-        followingDiv.style.boxShadow = `${shadowX}px ${shadowY}px 25px rgba(0,0,0,0.25)`;
+            followingDiv.style.boxShadow = `${shadowX}px ${shadowY}px 25px rgba(0,0,0,0.25)`;
+        }
     });
 }
 
 function envelopeOnClick() {
+    isOpened = true;
     const env = document.getElementById('envelope');
     const letter = document.getElementById('text');
 
+    env.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    env.style.boxShadow = '0px 0px 25px rgba(0,0,0,0.25)';
     env.classList.add('open');
     letter.classList.add('zoom-in');
     letter.addEventListener('click', () => {
+        env.classList.remove('straight');
         letter.classList.remove('zoom-in');
         letter.classList.add('zoom-out');
         setTimeout(resetEnvelope, 2000)
@@ -68,6 +76,7 @@ function envelopeOnClick() {
 }
 
 function resetEnvelope() {
+    isOpened = false;
     const env = document.getElementById('envelope');
     const letter = document.getElementById('text');
 

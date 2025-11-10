@@ -74,20 +74,22 @@ body {
 
 .letter {
     position: absolute;
-    top: 10px;
-    width: 90%;
-    height: 90%;
+    width: 180%;
+    height: 180%;
     background-color: white;
     cursor: pointer;
     z-index: 2;
     transform-origin: center;
     transition-timing-function: ease;
+    overflow-y: scroll;
+    padding: 20px;
+    transform: translateY(-80px) scale(0.5);
 }
 
 .letter p {
-    text-align: center;
-    font-size: 8px;
-    margin-top: 12px;
+    text-align: left;
+    font-size: 14px;
+    margin: 10px;
     color: #3B4049;
 }
 
@@ -123,34 +125,40 @@ body {
 
 @keyframes lift-and-zoom {
     0% {
-        transform: translateY(0px) scale(1);
+        transform: translateY(-80px) scale(0.5);
+        height: 180%;
         z-index: 2;
     }
 
     50% {
-        transform: translateY(-250px) scale(1);
+        transform: translateY(-330px) scale(0.5);
+        height: 180%;
         z-index: 2;
     }
 
     100% {
-        transform: translateY(0px) scale(1.8);
+        transform: translateY(-180px) scale(1);
+        height: 300%;
         z-index: 10;
     }
 }
 
 @keyframes zoom-out-and-put {
     0% {
-        transform: translateY(0px) scale(1.8);
+        transform: translateY(-180px) scale(1);
+        height: 300%;
         z-index: 10;
     }
 
     50% {
-        transform: translateY(-250px) scale(1);
+        transform: translateY(-330px) scale(0.5);
+        height: 180%;
         z-index: 2;
     }
 
     100% {
-        transform: translateY(0px) scale(1);
+        transform: translateY(-80px) scale(0.5);
+        height: 180%;
         z-index: 2;
     }
 }
