@@ -87,10 +87,10 @@ body {
 }
 
 .recipient p {
-  font-family: "Brush Script MT", cursive;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 24px;
+    font-family: "Brush Script MT", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 24px;
 }
 
 .letter {
@@ -186,24 +186,62 @@ body {
 
 /* ----- guard screen ----- */
 
-#login-box {
+.login-wrapper {
     background: white;
-    padding: 20px 30px;
+    padding: 40px 30px;
     border-radius: 8px;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+.login-wrapper h3 {
     text-align: center;
+    margin-bottom: 20px;
+}
+
+#wrong {
+    padding: 10px;
+    color: #840404;
+    font-size: small;
+    text-align: center;
+}
+
+.login-wrapper div {
+    align-self: flex-end;
+    font-style: italic;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
 }
 
 .hidden {
     display: none;
 }
 
+label {
+    flex-grow: 1;
+    text-align: end;
+    padding-right: 10px;
+}
+
 input {
-    margin: 10px 0;
     padding: 6px 8px;
-    width: 180px;
+    border-radius: 5px;
+    flex-grow: 0.5;
 }
 
 button {
     padding: 6px 12px;
+    margin-top: 20px;
+    border-radius: 5px;
     cursor: pointer;
+    transition-duration: 0.3s;
+}
+
+button:hover {
+    background-color: #3760C9;
+    color: #fff;
 }

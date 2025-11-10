@@ -15,10 +15,23 @@
     </audio>
 
     <div id="login-box">
-        <p>List jest zaszyfrowany.</p>
-        <label for="key-input">Wprowadź swoje imię:</label>
-        <input id="key-input">
-        <button id="submit-btn">Wejdź</button>
+        <div class="login-wrapper">
+            <h3>List jest zaszyfrowany.</h3>
+            <div>
+                <label for="input-1">Twoje imię:</label>
+                <input id="input-1">
+            </div>
+            <div>
+                <label for="input-2">Data ślubu Twojego brata (w formacie 01.01.1970):</label>
+                <input id="input-2">
+            </div>
+            <div>
+                <label for="input-3">Pierwsze słowo z mojego oryginalnego listu:</label>
+                <input id="input-3">
+            </div>
+            <button id="submit-btn">Czytaj list</button>
+            <p id="wrong" class="hidden"></p>
+        </div>
     </div>
 
     <div id="content-box" class="hidden">

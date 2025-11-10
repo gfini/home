@@ -1,13 +1,29 @@
 // ----- guard screen ------
 
-document.getElementById("submit-btn").addEventListener("click", () => {
+document.getElementById("submit-btn").addEventListener("click", onButtonClick);
+
+function onButtonClick() {
+    const input1 = document.getElementById("input-1").value;
+    const input2 = document.getElementById("input-2").value;
+    const input3 = document.getElementById("input-3").value;
+    const wrong = document.getElementById("wrong");
+
+    if (input1 == "" || input2 == "" || input3 == "") {
+        wrong.innerHTML = "Wszystkie pola muszą być uzupełnione ^^";
+        wrong.classList.remove('hidden')
+    } else {
+        showTheEnvelope();
+    }
+}
+
+function showTheEnvelope() {
     const loginBox = document.getElementById("login-box");
     const contentBox = document.getElementById("content-box");
 
     loginBox.classList.add("hidden");
     contentBox.classList.remove("hidden");
     prepareEnvelope()
-});
+}
 
 
 // ----- envelope -----
