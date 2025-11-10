@@ -59,6 +59,7 @@ function prepareEnvelope() {
 
 function envelopeOnClick() {
     isOpened = true;
+    fadeInAudio(document.getElementById('piano'))
     const env = document.getElementById('envelope-wrapper');
     const letter = document.getElementById('text');
 
@@ -67,6 +68,7 @@ function envelopeOnClick() {
     env.classList.add('open');
     letter.classList.add('zoom-in');
     letter.addEventListener('click', () => {
+        fadeOutAudio(document.getElementById('piano'))
         env.classList.remove('straight');
         letter.classList.remove('zoom-in');
         letter.classList.add('zoom-out');
@@ -84,6 +86,44 @@ function resetEnvelope() {
     env.classList.remove('open');
     env.addEventListener('click', envelopeOnClick);
 }
+
+
+// ----- audio -----
+
+function fadeInAudio(audio, duration = 2500) {
+    const steps = 25;
+    const stepTime = duration / steps;
+    const volumeStep = 1 / steps;
+
+    audio.volume = 0;
+    audio.play();
+    const fade = setInterval(() => {
+        const newVolume = audio.volume + volumeStep;
+        if (newVolume >= 1) {
+            audio.volume = 1;
+            clearInterval(fade);
+        } else {
+            audio.volume = newVolume;
+        }
+    }, stepTime);
+}
+
+function fadeOutAudio(audio, duration = 2500) {
+    const steps = 25;
+    const stepTime = duration / steps;
+    const volumeStep = 1 / steps;
+
+    const fade = setInterval(() => {
+        const newVolume = audio.volume - volumeStep;
+        if (newVolume <= 0) {
+            audio.pause();
+            clearInterval(fade);
+        } else {
+            audio.volume = newVolume;
+        }
+    }, stepTime);
+}
+
 
 // ----- decryption ------
 
