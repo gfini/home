@@ -1,8 +1,11 @@
+import { recipient as encryptedRecipient } from './data/recipient.js';
+import { content as encryptedContent } from './data/content.js';
+
 // ----- guard screen ------
 
 document.getElementById("submit-btn").addEventListener("click", onButtonClick);
 
-function onButtonClick() {
+async function onButtonClick() {
     const input1 = document.getElementById("input-1").value;
     const input2 = document.getElementById("input-2").value;
     const input3 = document.getElementById("input-3").value;
@@ -10,18 +13,27 @@ function onButtonClick() {
 
     if (input1 == "" || input2 == "" || input3 == "") {
         wrong.innerHTML = "Wszystkie pola muszą być uzupełnione ^^";
-        wrong.classList.remove('hidden')
     } else {
-        showTheEnvelope();
+        const keyStr = input1 + input2 + input3;
+        const decryptedRecipient = await decrypt(keyStr, encryptedRecipient);
+        if (decryptedRecipient !== null) {
+            const decryptedContent = await decrypt(keyStr, encryptedContent);
+            if (decryptedContent !== null) {
+                showTheEnvelope(decryptedRecipient, decryptedContent);
+                return;
+            }
+        }
+        wrong.innerHTML = "Coś jest nie tak ;)";
     }
+    wrong.classList.remove('hidden')
 }
 
-function showTheEnvelope() {
-    const loginBox = document.getElementById("login-box");
-    const contentBox = document.getElementById("content-box");
+function showTheEnvelope(recipient, content) {
+    document.getElementById("recipient").innerHTML = `<p>${recipient}</p>`
+    document.getElementById("letter").innerHTML = content
 
-    loginBox.classList.add("hidden");
-    contentBox.classList.remove("hidden");
+    document.getElementById("login-box").classList.add("hidden");
+    document.getElementById("content-box").classList.remove("hidden");
     prepareEnvelope()
 }
 
@@ -77,7 +89,7 @@ function envelopeOnClick() {
     isOpened = true;
     fadeInAudio(document.getElementById('piano'))
     const env = document.getElementById('envelope-wrapper');
-    const letter = document.getElementById('text');
+    const letter = document.getElementById('letter');
 
     env.style.transform = 'rotateX(0deg) rotateY(0deg)';
     env.style.boxShadow = '0px 0px 25px rgba(0,0,0,0.25)';
@@ -96,7 +108,7 @@ function envelopeOnClick() {
 function resetEnvelope() {
     isOpened = false;
     const env = document.getElementById('envelope-wrapper');
-    const letter = document.getElementById('text');
+    const letter = document.getElementById('letter');
 
     letter.classList.remove('zoom-out');
     env.classList.remove('open');
@@ -143,6 +155,7 @@ function fadeOutAudio(audio, duration = 2500) {
 
 // ----- decryption ------
 
+function toBytes(str) { return new TextEncoder().encode(str); }
 function fromBytes(bytes) { return new TextDecoder().decode(bytes); }
 
 function base64ToBytes(b64) {
@@ -169,16 +182,8 @@ async function deriveKey(passphrase, salt) {
     );
 }
 
-async function decrypt() {
-    const keyStr = document.getElementById("decKey").value;
-    const b64 = document.getElementById("decText").value;
-
-    const combined = base64ToBytes(b64);
-
-    if (combined.length < 16 + 12) {
-        document.getElementById("decOut").value = "Invalid ciphertext";
-        return;
-    }
+async function decrypt(keyStr, encryptedBase64Value) {
+    const combined = base64ToBytes(encryptedBase64Value);
 
     const salt = combined.slice(0, 16);
     const iv = combined.slice(16, 28);
@@ -192,8 +197,8 @@ async function decrypt() {
             key,
             ciphertext
         );
-        document.getElementById("decOut").value = fromBytes(new Uint8Array(plainBuf));
+        return fromBytes(new Uint8Array(plainBuf));
     } catch (e) {
-        document.getElementById("decOut").value = "Decryption failed (wrong key or corrupted data)";
+        return null;
     }
 }
