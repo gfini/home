@@ -5,6 +5,8 @@ import { content as encryptedContent } from './data/content.js';
 
 document.getElementById("submit-btn").addEventListener("click", onButtonClick);
 
+let triesCount = 0;
+
 async function onButtonClick() {
     const input1 = document.getElementById("input-1").value;
     const input2 = document.getElementById("input-2").value;
@@ -23,7 +25,15 @@ async function onButtonClick() {
                 return;
             }
         }
-        wrong.innerHTML = "Coś jest nie tak ;)";
+        if (++triesCount == 1) {
+            wrong.innerHTML = "Coś jest nie tak ;)";
+        } else if (triesCount == 2) {
+            wrong.innerHTML = "Tip: wielkość liter ma znaczenie :)";
+        } else if (triesCount == 3) {
+            wrong.innerHTML = "Hej, na pewno Ty jesteś odbiorcą tego listu? ^^";
+        } else {
+            wrong.innerHTML = "...";
+        }
     }
     wrong.classList.remove('hidden')
 }
