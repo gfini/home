@@ -110,15 +110,22 @@ function envelopeOnClick() {
     env.style.transform = 'rotateX(0deg) rotateY(0deg)';
     env.style.boxShadow = '0px 0px 25px rgba(0,0,0,0.25)';
     env.classList.add('open');
+
     letter.classList.add('zoom-in');
-    letter.addEventListener('click', () => {
-        fadeOutAudio(document.getElementById('piano'))
-        env.classList.remove('straight');
-        letter.classList.remove('zoom-in');
-        letter.classList.add('zoom-out');
-        setTimeout(resetEnvelope, 2000)
-    });
+    letter.addEventListener('click', letterOnClick);
+
     env.removeEventListener('click', envelopeOnClick);
+}
+
+function letterOnClick() {
+    fadeOutAudio(document.getElementById('piano'))
+
+    const letter = document.getElementById('letter');
+    letter.classList.remove('zoom-in');
+    letter.classList.add('zoom-out');
+
+    setTimeout(resetEnvelope, 2000)
+    letter.removeEventListener('click', letterOnClick);
 }
 
 function resetEnvelope() {
@@ -134,7 +141,11 @@ function resetEnvelope() {
 
 // ----- audio -----
 
+let fadeInIsRunning = false;
+let fadeOutIsRunning = false;
+
 function fadeInAudio(audio, duration = 2500) {
+    fadeInIsRunning = true;
     const steps = 25;
     const stepTime = duration / steps;
     const volumeStep = 1 / steps;
@@ -142,10 +153,15 @@ function fadeInAudio(audio, duration = 2500) {
     audio.volume = 0;
     audio.play();
     const fade = setInterval(() => {
+        if (fadeOutIsRunning) {
+            fadeInIsRunning = false;
+            clearInterval(fade);
+        }
         const newVolume = audio.volume + volumeStep;
         if (newVolume >= 1) {
             audio.volume = 1;
             clearInterval(fade);
+            fadeInIsRunning = false;
         } else {
             audio.volume = newVolume;
         }
@@ -153,15 +169,21 @@ function fadeInAudio(audio, duration = 2500) {
 }
 
 function fadeOutAudio(audio, duration = 2500) {
+    fadeOutIsRunning = true;
     const steps = 25;
     const stepTime = duration / steps;
     const volumeStep = 1 / steps;
 
     const fade = setInterval(() => {
+        if (fadeInIsRunning) {
+            fadeOutIsRunning = false;
+            clearInterval(fade);
+        }
         const newVolume = audio.volume - volumeStep;
         if (newVolume <= 0) {
             audio.pause();
             clearInterval(fade);
+            fadeOutIsRunning = false;
         } else {
             audio.volume = newVolume;
         }
