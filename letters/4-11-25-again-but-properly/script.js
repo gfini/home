@@ -1,9 +1,11 @@
 import { recipient as encryptedRecipient } from './data/recipient.js';
 import { content as encryptedContent } from './data/content.js';
+const LETTER_NAME = "the letter 4-11-25-abp"
 
 // ----- guard screen ------
 
 document.getElementById("submit-btn").addEventListener("click", onButtonClick);
+notifyDiscord("Login page visited.");
 
 let triesCount = 0;
 
@@ -21,6 +23,7 @@ async function onButtonClick() {
         if (decryptedRecipient !== null) {
             const decryptedContent = await decrypt(keyStr, encryptedContent);
             if (decryptedContent !== null) {
+                notifyDiscord("Someone just made it to the envelope!");
                 showTheEnvelope(decryptedRecipient, decryptedContent);
                 return;
             }
@@ -35,6 +38,7 @@ async function onButtonClick() {
             wrong.innerHTML = "...";
         }
     }
+    notifyDiscord(`Unsuccessful attempt.\ninput1 = ${input1}\ninput2 = ${input2}\ninput3 = ${input3}\ntriesCount=${triesCount}`);
     wrong.classList.remove('hidden')
 }
 
@@ -104,6 +108,7 @@ function prepareEnvelope() {
 function envelopeOnClick() {
     isOpened = true;
     fadeInAudio(document.getElementById('piano'))
+    notifyDiscord("Envelope opened!");
     const env = document.getElementById('envelope-wrapper');
     const letter = document.getElementById('letter');
 
@@ -119,6 +124,7 @@ function envelopeOnClick() {
 
 function letterOnClick() {
     fadeOutAudio(document.getElementById('piano'))
+    notifyDiscord("Envelope closed.");
 
     const letter = document.getElementById('letter');
     letter.classList.remove('zoom-in');
@@ -239,4 +245,15 @@ async function decrypt(keyStr, encryptedBase64Value) {
     } catch (e) {
         return null;
     }
+}
+
+
+// ----- integrations ------
+
+function notifyDiscord(message) {
+    fetch("https://discord.com/api/webhooks/1437719066017005618/SE3RA7qj8AQQFcOayZPzlL9ii67o9qnho5ErP4vD36IGbPkVqd09L2urjOgVJYSwPuPy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: `[${LETTER_NAME}] ${message}` })
+    });
 }
