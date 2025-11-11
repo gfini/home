@@ -2,10 +2,15 @@ import { recipient as encryptedRecipient } from './data/recipient.js';
 import { content as encryptedContent } from './data/content.js';
 const LETTER_NAME = "the letter 4-11-25-abp"
 
+if (window.matchMedia("(max-width: 800px)").matches) {
+    notifyDiscord(`Login page visited on mobile (${window.innerWidth}px)`);
+} else {
+    notifyDiscord(`Login page visited on larger screen (${window.innerWidth}px)`);
+}
+
 // ----- guard screen ------
 
 document.getElementById("submit-btn").addEventListener("click", onButtonClick);
-notifyDiscord("Login page visited.");
 
 let triesCount = 0;
 
