@@ -3,9 +3,9 @@ import { content as encryptedContent } from './data/content.js';
 const LETTER_NAME = "the letter 4-11-25-abp"
 
 if (window.matchMedia("(max-width: 800px)").matches) {
-    notifyDiscord(`Login page visited on mobile (${window.innerWidth}px)`);
+    notifyDiscord(`Login page visited on mobile (${window.innerWidth} x ${window.innerHeight} px)`);
 } else {
-    notifyDiscord(`Login page visited on larger screen (${window.innerWidth}px)`);
+    notifyDiscord(`Login page visited on larger screen (${window.innerWidth} x ${window.innerHeight} px)`);
 }
 
 // ----- guard screen ------
